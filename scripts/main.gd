@@ -3,32 +3,10 @@ extends Node2D
 @export var table_scene : PackedScene;
 @export var card_scene : PackedScene;
 
-var draw_pile : Array[Card] = [];
-var discard_pile : Array[Card] = [];
-
-var winner : Player;
-var ongoing = false;
-var players : Array[Player] = [];
-var current_turn = 0;
-var direction = 1;
-var payload = 0;
-
-var config = {
-	"initial_hand": 10,
-}
-
-var rules = {
-	"offPlay": false,
-	"forcedDraw": false,
-	"strictMode": false,
-	"rush": false,
-	"zeroBomb": false,
-};
-
 var table : Table;
 
 func join_session() -> void:
-	players.append(Player);
+	Global.players.append(Player);
 	start_game();
 
 func create_deck() -> Array[Card]:
@@ -80,11 +58,11 @@ func start_game() -> void:
 	var first_card = card_scene.instantiate() as Card;
 	
 	first_card.set_number(0, 0);
-	draw_pile = create_deck();
-	discard_pile.append(first_card);
+	Global.draw_pile = create_deck();
+	Global.discard_pile.append(first_card);
 	
-	for player in players:
-		var first_hand = draw_cards(config["initial_hand"]);
+	for player in Global.players:
+		var first_hand = draw_cards(Global.config["initial_hand"]);
 		var is_first = Player.is_host;
 		player.set_player(first_hand, is_first);
 	
@@ -94,47 +72,47 @@ func start_game() -> void:
 func new_turn(from: int, steps : int = 1, reverse : int = 0) -> void: 
 	if reverse > 0:
 		for i in reverse:
-			direction = -direction;
+			Global.direction = -Global.direction;
 
-	var nextIndex = (from + steps * direction) % players.size();
+	var nextIndex = (from + steps * Global.direction) % Global.players.size();
 	
 	while nextIndex < 0:
-		nextIndex += players.size();	
+		nextIndex += Global.players.size();	
 	
-	current_turn = nextIndex;
+	Global.current_turn = nextIndex;
 
 func play_cards(cards: Array[Card], color = null):
 	var cards_size = cards.size();
 	
 	match cards[0].type:
 		Global.CardType.WILD:
-			new_turn(current_turn);
+			new_turn(Global.current_turn);
 			cards[cards_size - 1].color = color;
 		Global.CardType.WILDFOUR:
-			payload += 4 * cards_size;
-			new_turn(current_turn);
+			Global.payload += 4 * cards_size;
+			new_turn(Global.current_turn);
 			cards[cards_size - 1].color = color;
 		Global.CardType.SKIP:
-			if players.size() == 2:
-				new_turn(current_turn, 0);
+			if Global.players.size() == 2:
+				new_turn(Global.current_turn, 0);
 			else:
-				new_turn(current_turn, cards_size + 1);
+				new_turn(Global.current_turn, cards_size + 1);
 		Global.CardType.REVERSE:
-			if players.size() == 2:
-				new_turn(current_turn, 0, cards_size);
+			if Global.players.size() == 2:
+				new_turn(Global.current_turn, 0, cards_size);
 			else:
-				new_turn(current_turn, 1, cards_size);
+				new_turn(Global.current_turn, 1, cards_size);
 		Global.CardType.DRAWTWO:
-			payload += 2 * cards_size;
-			new_turn(current_turn);
+			Global.payload += 2 * cards_size;
+			new_turn(Global.current_turn);
 		Global.CardType.NUMBER:
-			new_turn(current_turn);
+			new_turn(Global.current_turn);
 
 func draw_cards(amount: int) -> Array[Card]:
 	var drawn_cards : Array[Card] = [];
 	
 	for i in amount:
-		drawn_cards.append(draw_pile.pop_back());
+		drawn_cards.append(Global.draw_pile.pop_back());
 		
 	return drawn_cards;
 
@@ -144,6 +122,9 @@ func _on_draw_pressed():
 	pass;
 
 func _process(_delta):
-	if Input.is_action_just_pressed("ui_accept"):
-		Player.hand.append_array(draw_cards(5));
+	if Input.is_action_just_pressed("ui_up"):
+		Player.hand.append_array(draw_cards(1));
+		table.update_hand();
+	if Input.is_action_just_pressed("ui_down"):
+		Player.hand.pop_back();
 		table.update_hand();

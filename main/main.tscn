@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://s7gx5w7qyb5u"]
+[gd_scene load_steps=9 format=3 uid="uid://s7gx5w7qyb5u"]
 
 [ext_resource type="Shader" path="res://shaders/retro.gdshader" id="1_4qnsi"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lo85p"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cxr2ruju2mc2l" path="res://menu/menu.tscn" id="2_fph2l"]
 [ext_resource type="PackedScene" uid="uid://c5lggcirikbij" path="res://table/table.tscn" id="2_frcl1"]
 [ext_resource type="Script" path="res://scripts/multiplayer.gd" id="2_r38bj"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="7_pjie0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wj7dh"]
 shader = ExtResource("1_4qnsi")
@@ -35,6 +36,10 @@ shader_parameter/vignette_opacity = 0.5
 script = ExtResource("1_lo85p")
 table_scene = ExtResource("2_frcl1")
 card_scene = ExtResource("2_fnr3c")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("7_pjie0")
 
 [node name="Multiplayer" type="Node" parent="." node_paths=PackedStringArray("menu")]
 script = ExtResource("2_r38bj")

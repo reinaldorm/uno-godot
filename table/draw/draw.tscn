@@ -13,7 +13,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xbrui"]
 
-[node name="Draw" type="Node2D"]
+[node name="Draw" type="Node2D" groups=["draw"]]
 script = ExtResource("1_x8jtq")
 metadata/_edit_group_ = true
 

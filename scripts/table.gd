@@ -18,5 +18,8 @@ func set_table() -> Table:
 func update_hand() -> void:
 	hand.update_hand();
 
+func update_discard() -> void:
+	pass;
+
 func _process(_delta) -> void:
 	move_table();
