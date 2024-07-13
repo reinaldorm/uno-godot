@@ -1,0 +1,64 @@
+[gd_scene load_steps=11 format=3 uid="uid://qjtfg7vqfl3s"]
+
+[ext_resource type="Script" path="res://scripts/card.gd" id="1_r1fmw"]
+[ext_resource type="Shader" path="res://shaders/perspective.gdshader" id="2_l8vhe"]
+[ext_resource type="Texture2D" uid="uid://6w3d46ax438w" path="res://assets/cards/card_back.png" id="2_nrdat"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xowbt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_244i6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_phebd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hfjm3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3uvjy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_md5cu"]
+resource_local_to_scene = true
+shader = ExtResource("2_l8vhe")
+shader_parameter/fov = 90.0
+shader_parameter/cull_back = true
+shader_parameter/y_rot = 8.55e-06
+shader_parameter/x_rot = 8.55e-06
+shader_parameter/inset = 0.0
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0t4o1"]
+
+[node name="Card" type="Node2D"]
+script = ExtResource("1_r1fmw")
+
+[node name="Button" type="Button" parent="."]
+custom_minimum_size = Vector2(78, 120)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.0
+offset_top = -60.0
+offset_right = 39.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xowbt")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_244i6")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_phebd")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hfjm3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3uvjy")
+flat = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_md5cu")
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("2_nrdat")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_0t4o1")
+}
+
+[connection signal="button_down" from="Button" to="." method="_on_mouse_down"]
+[connection signal="button_up" from="Button" to="." method="_on_mouse_up"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_mouse_exited"]

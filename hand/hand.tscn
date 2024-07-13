@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://ba4qo1rk03e4o"]
+
+[ext_resource type="Script" path="res://scripts/hand.gd" id="2_2fu2c"]
+
+[sub_resource type="Curve" id="Curve_kl7rl"]
+min_value = -1.0
+_data = [Vector2(0, -1), 0.0, 2.0, 0, 1, Vector2(1, 1), 2.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5wwlf"]
+_data = [Vector2(0, 1), 0.0, -3.0, 0, 0, Vector2(0.506803, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 3.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_71cjg"]
+min_value = -1.0
+_data = [Vector2(0, -1), 0.0, 2.0, 0, 1, Vector2(1, 1), 2.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ly2lb"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[node name="Hand" type="Node2D"]
+script = ExtResource("2_2fu2c")
+x_curve = SubResource("Curve_kl7rl")
+y_curve = SubResource("Curve_5wwlf")
+rot_curve = SubResource("Curve_71cjg")
+delay_curve = SubResource("Curve_ly2lb")
+x_mult = 20.0
+y_mult = 5.0
+rot_mult = 0.02

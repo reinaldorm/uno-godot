@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxr2ruju2mc2l"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_kdabv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o8dcj"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.0666667, 0.0666667, 0.0666667, 0.501961)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_1feej"]
+font_size = 24
+
+[node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_kdabv")
+
+[node name="Menu" type="VBoxContainer" parent="."]
+offset_left = 571.0
+offset_right = 709.0
+offset_bottom = 720.0
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Create" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_o8dcj")
+text = "Create Session"
+
+[node name="Join" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_o8dcj")
+text = "Join Session"
+
+[node name="Code" type="LineEdit" parent="Menu"]
+layout_mode = 2
+placeholder_text = "Session Code"
+alignment = 1
+max_length = 4
+
+[node name="UserType" type="Label" parent="."]
+offset_left = 605.0
+offset_top = 20.0
+offset_right = 679.0
+offset_bottom = 54.0
+text = "Server"
+label_settings = SubResource("LabelSettings_1feej")
+
+[node name="UserID" type="Label" parent="."]
+offset_left = 605.0
+offset_top = 60.0
+offset_right = 679.0
+offset_bottom = 94.0
+text = "ID"
+label_settings = SubResource("LabelSettings_1feej")
+
+[connection signal="pressed" from="Menu/Create" to="." method="_on_create_pressed"]
+[connection signal="pressed" from="Menu/Join" to="." method="_on_join_pressed"]
+[connection signal="text_submitted" from="Menu/Code" to="." method="_on_code_text_submitted"]

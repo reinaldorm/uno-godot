@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://c5lggcirikbij"]
+
+[ext_resource type="PackedScene" uid="uid://5dsllsab88uj" path="res://background/background.tscn" id="1_0ahx1"]
+[ext_resource type="Script" path="res://scripts/table.gd" id="1_64e7m"]
+[ext_resource type="PackedScene" uid="uid://ba4qo1rk03e4o" path="res://hand/hand.tscn" id="3_ebdcg"]
+[ext_resource type="PackedScene" uid="uid://d3jsqs5frt2j7" path="res://table/draw/draw.tscn" id="5_xxsvy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3dqfu"]
+size = Vector2(90, 124)
+
+[node name="Table" type="Node2D" node_paths=PackedStringArray("hand")]
+script = ExtResource("1_64e7m")
+hand = NodePath("Hand")
+
+[node name="Background" parent="." instance=ExtResource("1_0ahx1")]
+custom_minimum_size = Vector2(1280, 720)
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 1
+grow_vertical = 1
+metadata/_edit_group_ = true
+
+[node name="Discard" type="Area2D" parent="."]
+position = Vector2(690, 360)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Discard"]
+shape = SubResource("RectangleShape2D_3dqfu")
+debug_color = Color(0.963474, 0.163579, 0.261141, 0.42)
+
+[node name="Label" type="RichTextLabel" parent="Discard"]
+offset_left = -44.0
+offset_top = -16.0
+offset_right = 44.0
+offset_bottom = 26.0
+bbcode_enabled = true
+text = "[center][rainbow][wave amp=50 freq=10]Discard[/wave][/rainbow][/center]"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Draw" parent="." instance=ExtResource("5_xxsvy")]
+position = Vector2(590, 360)
+
+[node name="Hand" parent="." instance=ExtResource("3_ebdcg")]
+position = Vector2(640, 600)
+
+[connection signal="draw_pressed" from="Draw" to="." method="_on_draw_pressed"]
