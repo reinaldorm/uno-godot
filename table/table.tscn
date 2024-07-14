@@ -11,7 +11,7 @@
 [node name="Table" type="Node2D" node_paths=PackedStringArray("hand", "adversaries")]
 script = ExtResource("1_64e7m")
 hand = NodePath("Hand")
-adversaries = [NodePath("AdversaryTop"), NodePath("AdversaryLeft"), NodePath("AdversaryRight")]
+adversaries = [NodePath("AdversaryLeft"), NodePath("AdversaryTop"), NodePath("AdversaryRight")]
 
 [node name="Hud" parent="." instance=ExtResource("2_nd1hi")]
 layer = 0

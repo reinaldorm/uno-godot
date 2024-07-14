@@ -17,8 +17,9 @@ func _process(_delta) -> void:
 	move_table();
 
 func _ready():
-	var players_but_client = Global.players.filter(func(p): return p != Client.player);
+	var client_index = Global.players.find(Client.player);
 	
-	for idx in players_but_client.size():
-		var slot = adversaries[idx];
-		slot.set_adversary(players_but_client[idx]);
+	for idx in Global.players.size() - 1:
+		var next_player_index = (client_index + (idx + 1)) % adversaries.size();
+		var slot = adversaries[next_player_index];
+		slot.set_adversary(Global.players[idx]);
