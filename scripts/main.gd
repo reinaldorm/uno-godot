@@ -3,10 +3,12 @@ extends Node2D
 @export var table_scene : PackedScene;
 @export var card_scene : PackedScene;
 
-var table : Table;
-
-func join_session() -> void:
-	Global.players.append(Player);
+func join_session(is_host: bool = false) -> void:
+	var client_player = Player.new();
+	Global.players.append(client_player);
+	Client.player = client_player;
+	Client.player.is_host = is_host;
+	
 	start_game();
 
 func create_deck() -> Array[Card]:
@@ -61,12 +63,17 @@ func start_game() -> void:
 	Global.draw_pile = create_deck();
 	Global.discard_pile.append(first_card);
 	
+	for bot in 4 - Global.players.size():
+		var bot_player = Player.new();
+		bot_player.is_bot = true;
+		bot_player.username = "Bot " + str(bot);
+		Global.players.append(bot_player);
+	
 	for player in Global.players:
 		var first_hand = draw_cards(Global.config["initial_hand"]);
-		var is_first = Player.is_host;
-		player.set_player(first_hand, is_first);
+		player.set_player(first_hand, player.is_host); 
 	
-	table = table_scene.instantiate().set_table();
+	var table = table_scene.instantiate();
 	add_child(table);
 
 func new_turn(from: int, steps : int = 1, reverse : int = 0) -> void: 
@@ -80,9 +87,13 @@ func new_turn(from: int, steps : int = 1, reverse : int = 0) -> void:
 		nextIndex += Global.players.size();	
 	
 	Global.current_turn = nextIndex;
+	
+	for player in Global.players:
+		player.is_turn = player == Global.players[Global.current_turn];
 
 func play_cards(cards: Array[Card], color = null):
 	var cards_size = cards.size();
+	var playing_player = Global.players[Global.current_turn];
 	
 	match cards[0].type:
 		Global.CardType.WILD:
@@ -107,6 +118,12 @@ func play_cards(cards: Array[Card], color = null):
 			new_turn(Global.current_turn);
 		Global.CardType.NUMBER:
 			new_turn(Global.current_turn);
+			
+	playing_player.hand = playing_player.hand.filter(func(c): return cards.all(func(d): return c != d ));
+	Global.discard_pile.append_array(cards);
+	
+	get_tree().call_group("player", "update_turn");
+	get_tree().call_group("discard", "update_discard", cards);
 
 func draw_cards(amount: int) -> Array[Card]:
 	var drawn_cards : Array[Card] = [];
@@ -123,8 +140,8 @@ func _on_draw_pressed():
 
 func _process(_delta):
 	if Input.is_action_just_pressed("ui_up"):
-		Player.hand.append_array(draw_cards(1));
-		table.update_hand();
+		Client.player.hand.append_array(draw_cards(1));
+		get_tree().call_group("hand", "update_hand");
 	if Input.is_action_just_pressed("ui_down"):
-		Player.hand.pop_back();
-		table.update_hand();
+		Client.player.hand.pop_back();
+		get_tree().call_group("hand", "update_hand");

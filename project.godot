@@ -17,14 +17,13 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://scripts/global.gd"
-Player="*res://scripts/player.gd"
+Global="*res://autoload/Global.gd"
+Client="*res://autoload/Client.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/mode=2
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="res://assets/cursor/default.png"
 

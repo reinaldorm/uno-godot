@@ -10,9 +10,8 @@ const ADDRESS = "127.0.0.1";
 func _on_menu_create_pressed():
 	multiplayer_peer.create_server(PORT, 4);
 	multiplayer.multiplayer_peer = multiplayer_peer;
-	Player.is_host = true;
 	_debug_menu("Server");
-	get_parent().join_session();
+	get_parent().join_session(true);
 
 func _on_menu_join_pressed():
 	multiplayer_peer.create_client(ADDRESS, PORT);

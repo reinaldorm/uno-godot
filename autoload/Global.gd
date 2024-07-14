@@ -19,9 +19,9 @@ var config = {
 }
 
 var rules = {
-	"offPlay": false,
-	"forcedDraw": false,
-	"strictMode": false,
+	"off_play": false,
+	"forced_draw": false,
+	"strict_mode": false,
 	"rush": false,
-	"zeroBomb": false,
+	"zero_bomb": false,
 };

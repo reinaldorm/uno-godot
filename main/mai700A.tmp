@@ -11,10 +11,10 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wj7dh"]
 shader = ExtResource("1_4qnsi")
 shader_parameter/overlay = true
-shader_parameter/scanlines_opacity = 0.05
-shader_parameter/scanlines_width = 0.441
+shader_parameter/scanlines_opacity = 0.0
+shader_parameter/scanlines_width = 0.01
 shader_parameter/grille_opacity = 0.01
-shader_parameter/resolution = Vector2(1280, 720)
+shader_parameter/resolution = Vector2(600, 600)
 shader_parameter/pixelate = true
 shader_parameter/roll = false
 shader_parameter/roll_speed = 1.0
@@ -29,21 +29,21 @@ shader_parameter/brightness = 2.0
 shader_parameter/discolor = true
 shader_parameter/warp_amount = 0.0
 shader_parameter/clip_warp = false
-shader_parameter/vignette_intensity = 0.1
-shader_parameter/vignette_opacity = 1.0
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.5
 
 [node name="Main" type="Node2D" groups=["game"]]
 script = ExtResource("1_lo85p")
 table_scene = ExtResource("2_frcl1")
 card_scene = ExtResource("2_fnr3c")
 
-[node name="Multiplayer" type="Node" parent="." node_paths=PackedStringArray("menu")]
-script = ExtResource("2_r38bj")
-menu = NodePath("../Menu")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(640, 360)
 script = ExtResource("7_pjie0")
+
+[node name="Multiplayer" type="Node" parent="." node_paths=PackedStringArray("menu")]
+script = ExtResource("2_r38bj")
+menu = NodePath("../Menu")
 
 [node name="Post" type="CanvasLayer" parent="."]
 layer = 0

@@ -1,11 +1,40 @@
-extends Area2D
+extends Node2D;
 
+var tween : Tween;
 
-# Called when the node enters the scene tree for the first time.
+func update_discard(cards: Array[Card]):
+	var card_amount = cards.size();
+
+	var tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SPRING);
+	
+	for idx in cards.size():
+		var card = cards[idx] as Card;
+		var delay = idx * 0.25;
+		
+		if card.is_inside_tree(): card.reparent(self);
+		else: add_child(card);
+		card.set_inactive();
+		
+		tween.tween_property(card, "position", Vector2.ZERO, 0.4).set_delay(delay);
+
 func _ready():
-	pass # Replace with function body.
+	update_discard(Global.discard_pile);
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	pass;
+
+func _on_button_pressed():
+	if Client.player.selected_cards.size() > 0:
+		get_tree().call_group("game", "play_cards", Client.player.selected_cards);
+
+func _on_mouse_entered():
+	if tween and tween.is_running(): tween.kill();
+	
+	tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SPRING).set_parallel();
+	tween.tween_property(self, "scale", Vector2.ONE * 1.15, 0.2);
+
+func _on_mouse_exited():
+	if tween and tween.is_running(): tween.kill();
+	
+	tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SPRING).set_parallel();
+	tween.tween_property(self, "scale", Vector2.ONE, 0.2);

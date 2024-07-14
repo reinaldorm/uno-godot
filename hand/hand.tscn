@@ -20,7 +20,7 @@ point_count = 2
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
-[node name="Hand" type="Node2D"]
+[node name="Hand" type="Node2D" groups=["hand", "player"]]
 script = ExtResource("2_2fu2c")
 x_curve = SubResource("Curve_kl7rl")
 y_curve = SubResource("Curve_5wwlf")
