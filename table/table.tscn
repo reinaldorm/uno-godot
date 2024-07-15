@@ -8,9 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://d3jsqs5frt2j7" path="res://table/draw/draw.tscn" id="5_xxsvy"]
 [ext_resource type="PackedScene" uid="uid://b2kx0mojh5n5b" path="res://adversary/adversary.tscn" id="6_4gfw6"]
 
-[node name="Table" type="Node2D" node_paths=PackedStringArray("hand", "adversaries")]
+[node name="Table" type="Node2D" node_paths=PackedStringArray("adversaries")]
 script = ExtResource("1_64e7m")
-hand = NodePath("Hand")
 adversaries = [NodePath("AdversaryLeft"), NodePath("AdversaryTop"), NodePath("AdversaryRight")]
 
 [node name="Hud" parent="." instance=ExtResource("2_nd1hi")]
@@ -28,19 +27,25 @@ grow_vertical = 1
 metadata/_edit_group_ = true
 
 [node name="Discard" parent="." instance=ExtResource("3_4vf1n")]
+unique_name_in_owner = true
 position = Vector2(690, 360)
 
 [node name="Draw" parent="." instance=ExtResource("5_xxsvy")]
+unique_name_in_owner = true
 position = Vector2(590, 360)
 
 [node name="Hand" parent="." instance=ExtResource("3_ebdcg")]
+unique_name_in_owner = true
 position = Vector2(640, 600)
 
 [node name="AdversaryLeft" parent="." instance=ExtResource("6_4gfw6")]
+unique_name_in_owner = true
 position = Vector2(290, 360)
 
 [node name="AdversaryRight" parent="." instance=ExtResource("6_4gfw6")]
+unique_name_in_owner = true
 position = Vector2(990, 360)
 
 [node name="AdversaryTop" parent="." instance=ExtResource("6_4gfw6")]
+unique_name_in_owner = true
 position = Vector2(640, 100)

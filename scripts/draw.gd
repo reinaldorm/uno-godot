@@ -1,8 +1,6 @@
 extends Node2D;
 class_name Draw;
 
-signal draw_pressed;
-
 var tween_handle : Tween;
 var hovering : bool = false;
 
@@ -23,7 +21,7 @@ func _on_mouse_exited():
 	Input.set_custom_mouse_cursor(load("res://assets/cursor/default.png"));
 
 func _on_mouse_down():
-	draw_pressed.emit();
+	if not Client.player.is_turn: return;
 	if tween_handle: tween_handle.kill();
 	
 	tween_handle = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC);

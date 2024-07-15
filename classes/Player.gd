@@ -8,16 +8,14 @@ var is_host = false;
 var is_bot = false;
 
 var hand : Array[Card] = [];
-var selected_cards: Array[Card] = [];
-var legal_cards: Array[Card] = [];
 
 func set_player(new_hand: Array[Card], is_first: bool = false) -> void:
 	hand = new_hand;
 	is_turn = is_first;
 
-func get_legal_cards(discard_pile: Array[Card]) -> void:
+static func get_legal_cards(hand: Array[Card], selected_cards: Array[Card], game: Game) -> Array[Card]:
 	var next_legal_cards: Array[Card] = []
-	var last_card = Global.discard_pile[Global.discard_pile.size() - 1]
+	var last_card = game.discard_pile[game.discard_pile.size() - 1]
 
 	if selected_cards.size() > 0:
 		var all_cards_but_selected = hand.filter(func(card):
@@ -25,7 +23,7 @@ func get_legal_cards(discard_pile: Array[Card]) -> void:
 		)
 
 		for card in all_cards_but_selected:
-			if Global.payload:
+			if game.payload:
 				if card.type == Global.CardType.WILDFOUR:
 					if card.type == selected_cards[0].type:
 						next_legal_cards.append(card)
@@ -43,7 +41,7 @@ func get_legal_cards(discard_pile: Array[Card]) -> void:
 					if card.number == selected_cards[0].number:
 						next_legal_cards.append(card)
 	else:
-		if Global.payload:
+		if game.payload:
 			for card in hand:
 				if card.type == Global.CardType.WILDFOUR:
 					next_legal_cards.append(card)
@@ -69,4 +67,7 @@ func get_legal_cards(discard_pile: Array[Card]) -> void:
 					if card.number == last_card.number:
 						next_legal_cards.append(card)
 
-	legal_cards = next_legal_cards;
+	return next_legal_cards;
+
+static func get_off_legal_cards() -> Array[Card]:
+	return [];

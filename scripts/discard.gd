@@ -1,5 +1,6 @@
 extends Node2D;
 
+@onready var hand : Hand = %Hand;
 var tween : Tween;
 
 func update_discard(cards: Array[Card]):
@@ -18,14 +19,14 @@ func update_discard(cards: Array[Card]):
 		tween.tween_property(card, "position", Vector2.ZERO, 0.4).set_delay(delay);
 
 func _ready():
-	update_discard(Global.discard_pile);
+	update_discard(Global.game.discard_pile);
 
 func _process(delta):
 	pass;
 
 func _on_button_pressed():
-	if Client.player.selected_cards.size() > 0:
-		get_tree().call_group("game", "play_cards", Client.player.selected_cards);
+	if hand.selected_cards.size() > 0:
+		get_tree().call_group("game", "play_cards", hand.selected_cards);
 
 func _on_mouse_entered():
 	if tween and tween.is_running(): tween.kill();

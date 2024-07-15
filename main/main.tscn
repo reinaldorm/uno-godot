@@ -47,6 +47,7 @@ script = ExtResource("7_pjie0")
 
 [node name="Post" type="CanvasLayer" parent="."]
 layer = 0
+visible = false
 
 [node name="TextureRect" type="ColorRect" parent="Post"]
 material = SubResource("ShaderMaterial_wj7dh")

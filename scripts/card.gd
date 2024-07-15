@@ -9,25 +9,25 @@ signal card_up;
 @onready var sprite : Sprite2D = %Sprite2D;
 @onready var button : Button = %Button;
 
-var type : Global.CardType = Global.CardType.NULL;
-var color : Global.CardColor = Global.CardColor.NULL;
+var type : Game.CardType = Game.CardType.NULL;
+var color : Game.CardColor = Game.CardColor.NULL;
 var number : int = -1;
 
 var texture_path : String = "";
 var inactive : bool = false;
 
-func set_number(c: Global.CardColor, n: int):
-	type = Global.CardType.NUMBER;
+func set_number(c: Game.CardColor, n: int):
+	type = Game.CardType.NUMBER;
 	color = c;
 	number = n;
 	texture_path = "colored/numbered/{color}/{number}.png".format({ "color": color, "number": number });
 
-func set_colored_special(t: Global.CardType, c: Global.CardColor):
+func set_colored_special(t: Game.CardType, c: Game.CardColor):
 	type = t;
 	color = c;
 	texture_path = "colored/special/{color}/{type}.png".format({ "color": color, "type": type });
 
-func set_special(t: Global.CardType):
+func set_special(t: Game.CardType):
 	type = t;
 	texture_path = "exotic/{type}.png".format({ "type": type });
 

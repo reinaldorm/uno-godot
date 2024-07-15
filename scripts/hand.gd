@@ -10,7 +10,7 @@ class_name Hand;
 @export var y_mult : float : get = _get_y_mult;
 @export var rot_mult : float : get = _get_rot_mult;
 
-@onready var draw_pile : Node2D = get_tree().get_first_node_in_group("draw");
+@onready var draw_pile : Node2D = %Draw;
 
 var tween_split : Tween;
 var tween_hover : Tween;
@@ -19,26 +19,25 @@ var is_hovering : bool;
 var hovering_card : Card;
 var hovering_siblings : Array;
 
+var selected_cards : Array[Card] = [];
+var legal_cards : Array[Card] = [];
+
 func update_turn():
-	Client.player.selected_cards = [];
-	Client.player.legal_cards = [];
+	selected_cards = [];
+	legal_cards = [];
 	if Client.player.is_turn:
-		print('hand turn');
-		Client.player.get_legal_cards(Global.discard_pile);
+		legal_cards = Player.get_legal_cards(Client.player.hand, selected_cards, Global.game);
 	else:
-		print('not hand turn');
 		if Global.rules["off_play"]:
 			pass; # get_offturn_legal_cards;
 	
-	arrange_hand();
+	update_hand();
 
 func update_hand():
 	var actual_nodes = get_children();
 	
 	var to_add = Client.player.hand.filter(func(c): return actual_nodes.all(func(n): return c != n));
-	var to_remove = actual_nodes.filter(func(c): return Client.player.hand.all(func(n): return c != n));
 	
-	for card in to_remove: card.queue_free();
 	for card in to_add:
 		card.connect("card_entered", _on_card_entered);
 		card.connect("card_exited", _on_card_exited);
@@ -51,18 +50,14 @@ func update_hand():
 
 func arrange_hand():
 	var actual_size = Client.player.hand.size();
-	if tween_split and tween_split.is_running:
-		tween_split.kill();
+	if tween_split and tween_split.is_running: tween_split.kill();
 		
-	tween_split = create_tween();
-	tween_split.set_ease(Tween.EASE_OUT);
-	tween_split.set_trans(Tween.TRANS_ELASTIC);
-	tween_split.set_parallel();
+	tween_split = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC).set_parallel();
 
 	for idx in actual_size:
 		var card : Card = Client.player.hand[idx];
 		var ratio = 0.0;
-	
+		
 		if actual_size == 1: ratio = 0.5;
 		else: ratio = float(idx) / float((actual_size - 1));
 			
@@ -70,7 +65,7 @@ func arrange_hand():
 		var final_y = y_curve.sample(ratio) * (actual_size * y_mult);
 		var final_rot = rot_curve.sample(ratio) * (actual_size * rot_mult);
 			
-		if Client.player.selected_cards.has(card):
+		if selected_cards.has(card):
 			tween_split.tween_property(card, "sprite:material:shader_parameter/width", 0, 0.4);
 			tween_split.tween_property(card, "rotation", 0, 0.4);
 			tween_split.tween_property(card, "position:y", final_y - 30, 0.4);
@@ -81,7 +76,7 @@ func arrange_hand():
 			tween_split.tween_property(card, "position:x", final_x, 0.4);
 			tween_split.tween_property(card, "position:y", final_y, 0.4);
 			
-			if Client.player.legal_cards.has(card):
+			if legal_cards.has(card):
 				tween_split.tween_property(card, "sprite:material:shader_parameter/width", 1, 0.4);
 				tween_split.tween_property(card, "scale", Vector2.ONE * 1.1, 0.4);
 			else:
@@ -95,23 +90,23 @@ func hover_card():
 	hovering_card.z_index = 99;
 
 func select_card(card: Card) -> void:
-	if Client.player.selected_cards.size() > 0:
-		var first_card = Client.player.selected_cards[0];
-		if Client.player.selected_cards.has(card):
+	if selected_cards.size() > 0:
+		var first_card = selected_cards[0];
+		if selected_cards.has(card):
 			if card == first_card:
-				Client.player.selected_cards = []
+				selected_cards = []
 			else:
-				Client.player.selected_cards = Client.player.selected_cards.filter(func(c):
+				selected_cards = selected_cards.filter(func(c):
 					return c != card
 				)
 		else:
-			if Client.player.legal_cards.has(card):
-				Client.player.selected_cards.append(card);
+			if legal_cards.has(card):
+				selected_cards.append(card);
 	else:
-		if Client.player.legal_cards.has(card):
-			Client.player.selected_cards = [card];
+		if legal_cards.has(card):
+			selected_cards = [card];
 	
-	Client.player.get_legal_cards(Global.discard_pile);
+	legal_cards = Player.get_legal_cards(Client.player.hand, selected_cards, Global.game);
 	arrange_hand();
 
 func _get_x_mult():
@@ -152,13 +147,11 @@ func _on_card_exited(card: Card):
 		card.z_index = 0;
 
 func _on_card_down(card: Card):
-	if Client.player.legal_cards.has(card) or Client.player.selected_cards.has(card):
+	if legal_cards.has(card) or selected_cards.has(card):
 		select_card(card);
 
 func _on_card_up(card: Card):
 	pass;
 
 func _ready():
-	if Client.player.is_turn:
-		Client.player.get_legal_cards(Global.discard_pile);
-	update_hand();
+	pass;
